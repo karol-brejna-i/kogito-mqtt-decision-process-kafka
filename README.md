@@ -3,6 +3,18 @@
 ## Description
 TODO
 
+![](./doc/process_overview.png)
+
+The process begins with a MQTT message. The message reflects a customer movement around a store.
+
+Then business rules (DRL) are used to:
+* identify the department that the customers is currently in
+* check how much time he spent in that department (more accurately: how many consequent "moves" he made in that area);
+  if he spent some desired time there, the service rules out that he is focused in a given area 
+  (so, we could probably send him a promo coupon, send notification to the staff to help him out, etc.)
+  
+When a focused customer is identified, a proper Kafka message is sent.
+
 ## Local development/testing
 
 ### Prerequisites
@@ -62,7 +74,7 @@ private static List<Department> getDepartments(){
 
 (The config should be externalized and available through a config file/environment variables...)
 
-## Additional info
+## Additional info 
 
 #### Testing with MQTT broker in docker
 
@@ -122,7 +134,7 @@ where
 * `localhost:9092` is the broker's URL
 * `FOCUS_EVENT` is the topic name
 
-To **subscribe to a topoic**, one can issue the following command:
+To **subscribe to a topic**, one can issue the following command:
 
 ```sh
 docker-compose exec broker bash -c "kafka-console-consumer --bootstrap-server localhost:9092 --topic FOCUS_EVENT"
@@ -131,3 +143,7 @@ docker-compose exec broker bash -c "kafka-console-consumer --bootstrap-server lo
 * `broker` is the name of the container hosting Kafka broker instance
 * `localhost:9092` is the broker's URL
 * `FOCUS_EVENT` is the topic name
+
+
+#### Building and packaging
+For building and packaging information see: [packaging.md](./packaging.md)

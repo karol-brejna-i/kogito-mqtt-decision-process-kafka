@@ -16,9 +16,9 @@ salience 1000
 when
     m: /customerMovements[customer_id: id]
 then
-    System.out.println("------------------------------------- rule ENTRY; customer id = " + customer_id);
+    System.out.println(String.format("---- rule %s; customer id = %s", drools.getRule().getName(), customer_id));
     CustomerLocation l  = storeLocationService.retrieveLocation(m);
-    //System.out.println("l: " + l);
+
     insert(l);
     customerLocations.add(l);
 end
@@ -38,14 +38,13 @@ then
    };
 end
 
-rule "Nowhere"
+rule "Location unknown"
 salience 90
 activation-group "positionning"
 when
  c: /customerMovements[customer_id: id]
 then
-    System.out.println("------------------------------------- rule Nowhere; customer id = " + customer_id);
-    //System.out.println(drools.getRule().getName());
+    System.out.println(String.format("---- rule %s; customer id = %s", drools.getRule().getName(), customer_id));
     modify(c) {
         setSeenIn(null)
    };
@@ -60,8 +59,7 @@ when
  c: /customerMovements[customer_id: id]
  l: /customerLocations[id == customer_id]
 then
-    System.out.println("------------------------------------- sprawdzam focus; customer id = " + customer_id);
-    //System.out.println(drools.getRule().getName());
+    System.out.println(String.format("---- rule %s; customer id = %s", drools.getRule().getName(), customer_id));
 
     // if customer is seen in the same location again
     if (c.getSeenIn() != null && c.getSeenIn() == l.getLastSeenIn()) {
@@ -76,34 +74,22 @@ then
     l.update(c);
     update(l);
 
-    //System.out.println("New L: " + l);
+    // and remember it
     storeLocationService.storeLocation(l);
-    //System.out.println("After storing location");
 end
 
-rule "Is focused"
+rule "Announce focused customer"
 salience 40
 when
  l: /customerLocations[cnt >= requiredNumberOfSteps]
 then
-    System.out.println("------------------------------------- sprawdzam Is focused");
-    System.out.println("l: " + l);
+    System.out.println(String.format("---- rule %s; location = %s", drools.getRule().getName(), l.toString()));
+
     CustomerFocus focus = new CustomerFocus(l.getTs(), l.getId(), l.getLastSeenIn());
     customerFocus.add(focus);
     insert(focus);
 end
 //--
-
-rule "Testowo Is not focused"
-salience 40
-when
- l: /customerLocations[cnt < requiredNumberOfSteps]
-then
-     // do nothing
-     System.out.println("------------------------------------- entered " + drools.getRule().getName());
-     System.out.println("l: " + l);
-end
-
 
 query FindFocused
     $c : /customerFocus
