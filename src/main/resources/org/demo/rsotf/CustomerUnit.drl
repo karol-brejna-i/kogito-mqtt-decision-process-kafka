@@ -1,0 +1,110 @@
+package org.demo.rsotf;
+
+unit CustomerUnit;
+
+import org.demo.rsotf.model.CustomerLocation;
+import org.demo.rsotf.model.CustomerMovement;
+import org.demo.rsotf.model.CustomerFocus;
+import org.demo.rsotf.model.Department;
+
+import org.demo.rsotf.services.StoreLocationService;
+
+global StoreLocationService storeLocationService
+
+rule "Retrieve previous location"
+salience 1000
+when
+    m: /customerMovements[customer_id: id]
+then
+    System.out.println("------------------------------------- rule ENTRY; customer id = " + customer_id);
+    CustomerLocation l  = storeLocationService.retrieveLocation(m);
+    //System.out.println("l: " + l);
+    insert(l);
+    customerLocations.add(l);
+end
+
+
+//-- Rules regarding user location in the store
+rule "Locate department"
+salience 100
+activation-group "positionning"
+when
+ c: /customerMovements[x : x, y: y]
+ d: /departmentDataStore[department_id: id, getArea().contains(x, y)]
+then
+    System.out.println("------------------------------------- rule Locate department");
+    modify(c) {
+        setSeenIn(d.getId())
+   };
+end
+
+rule "Nowhere"
+salience 90
+activation-group "positionning"
+when
+ c: /customerMovements[customer_id: id]
+then
+    System.out.println("------------------------------------- rule Nowhere; customer id = " + customer_id);
+    //System.out.println(drools.getRule().getName());
+    modify(c) {
+        setSeenIn(null)
+   };
+end
+//--
+
+
+//-- Rules determining customer focus
+rule "Determine focus"
+salience 50
+when
+ c: /customerMovements[customer_id: id]
+ l: /customerLocations[id == customer_id]
+then
+    System.out.println("------------------------------------- sprawdzam focus; customer id = " + customer_id);
+    //System.out.println(drools.getRule().getName());
+
+    // if customer is seen in the same location again
+    if (c.getSeenIn() != null && c.getSeenIn() == l.getLastSeenIn()) {
+        System.out.println("User moved around THE SAME DEPARTMENT");
+        l.setCnt(l.getCnt() + 1);
+    } else {
+        System.out.println("Reset customer location");
+        l.setCnt(1);
+    }
+
+    // update last position
+    l.update(c);
+    update(l);
+
+    //System.out.println("New L: " + l);
+    storeLocationService.storeLocation(l);
+    //System.out.println("After storing location");
+end
+
+rule "Is focused"
+salience 40
+when
+ l: /customerLocations[cnt >= requiredNumberOfSteps]
+then
+    System.out.println("------------------------------------- sprawdzam Is focused");
+    System.out.println("l: " + l);
+    CustomerFocus focus = new CustomerFocus(l.getTs(), l.getId(), l.getLastSeenIn());
+    customerFocus.add(focus);
+    insert(focus);
+end
+//--
+
+rule "Testowo Is not focused"
+salience 40
+when
+ l: /customerLocations[cnt < requiredNumberOfSteps]
+then
+     // do nothing
+     System.out.println("------------------------------------- entered " + drools.getRule().getName());
+     System.out.println("l: " + l);
+end
+
+
+query FindFocused
+    $c : /customerFocus
+end
