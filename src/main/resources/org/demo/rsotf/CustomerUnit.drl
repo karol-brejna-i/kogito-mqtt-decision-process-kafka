@@ -118,12 +118,24 @@ then
     customerFocus.add(focus);
     insert(focus);
 end
+
+rule "Announce browsing customer"
+salience 40
+when
+ s: /customerState[inStateCnt >= 10, state == CustomerStateType.BROWSING]
+then
+    System.out.println(String.format("---- rule %s; location = %s", drools.getRule().getName(), s.toString()));
+
+    browsingCustomer.set(s);
+    insert(s);
+end
+
 //--
 
 query FindFocused
     $c : /customerFocus
 end
 
-query FindBrowsking
+query FindBrowsing
     $c : /customerFocus
 end

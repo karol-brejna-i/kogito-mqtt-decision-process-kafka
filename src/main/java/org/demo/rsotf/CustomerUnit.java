@@ -16,6 +16,7 @@ public class CustomerUnit implements RuleUnitData {
     private SingletonStore<CustomerMovement> customerMovements;
     private SingletonStore<CustomerState> customerState;
     private DataStore<CustomerFocus> customerFocus;
+    private SingletonStore<CustomerState> browsingCustomer;
 
     // Number of "steps" in the same department to treat a customer as focused
     private int requiredNumberOfSteps = 3;
@@ -28,7 +29,7 @@ public class CustomerUnit implements RuleUnitData {
                 DataSource.createSingleton(),
                 DataSource.createStore(),
                 DataSource.createStore(),
-                CustomerUnit.getDepartments());
+                CustomerUnit.getDepartments(), DataSource.createSingleton());
         System.out.println("Creating data sources");
     }
 
@@ -37,11 +38,12 @@ public class CustomerUnit implements RuleUnitData {
             SingletonStore<CustomerState> customerState,
             DataStore<CustomerFocus> customerFocus,
             DataStore<Department> departmentDataStore,
-            List<Department> departments) {
+            List<Department> departments, SingletonStore<CustomerState> browsingCustomer) {
 
         this.customerMovements = customerMovements;
         this.customerState = customerState;
         this.departmentDataStore = departmentDataStore;
+        this.browsingCustomer = browsingCustomer;
 
         for (Department d : departments) {
             departmentDataStore.add(d);
@@ -102,5 +104,13 @@ public class CustomerUnit implements RuleUnitData {
 
     public void setRequiredNumberOfSteps(int requiredNumberOfSteps) {
         this.requiredNumberOfSteps = requiredNumberOfSteps;
+    }
+
+    public SingletonStore<CustomerState> getBrowsingCustomer() {
+        return browsingCustomer;
+    }
+
+    public void setBrowsingCustomer(SingletonStore<CustomerState> browsingCustomer) {
+        this.browsingCustomer = browsingCustomer;
     }
 }
