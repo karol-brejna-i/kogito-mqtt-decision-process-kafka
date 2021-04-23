@@ -1,7 +1,8 @@
 package org.demo.rsotf.services;
 
-import org.demo.rsotf.model.CustomerLocation;
 import org.demo.rsotf.model.CustomerMovement;
+import org.demo.rsotf.model.CustomerState;
+import org.demo.rsotf.model.CustomerStateType;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.util.HashMap;
@@ -10,22 +11,23 @@ import java.util.Map;
 @ApplicationScoped
 public class StoreLocationService {
 
-    private static Map<String, CustomerLocation> store = new HashMap<>();
+    private static Map<String, CustomerState> store = new HashMap<>();
 
     public StoreLocationService() {
     }
 
-    public static CustomerLocation locationFromMovement(CustomerMovement m) {
-        return new CustomerLocation(m.getId(), m.getX(), m.getY(), m.getTs(), m.getSeenIn(), m.getTs(), 1);
+    public static CustomerState locationFromMovement(CustomerStateType state, CustomerMovement m) {
+        return new CustomerState(m.getId(), state, m.getX(), m.getY(), m.getTs(), m.getSeenIn(), m.getTs(), 1, m.getTs());
     }
 
-    public boolean storeLocation(CustomerLocation location) {
-        CustomerLocation stored = StoreLocationService.store.put(location.getId(), location);
+    public boolean storeLocation(CustomerState location) {
+        CustomerState stored = StoreLocationService.store.put(location.getId(), location);
         return true;
     }
 
-    public CustomerLocation retrieveLocation(CustomerMovement movement) {
-        CustomerLocation retrieved = StoreLocationService.store.getOrDefault(movement.getId(), locationFromMovement(movement));
+    public CustomerState retrieveLocation(CustomerMovement movement) {
+        CustomerState retrieved = StoreLocationService.store.getOrDefault(
+                movement.getId(), locationFromMovement(CustomerStateType.UNKNOWN, movement));
 
         if (retrieved == null) {
             System.out.println("Something went terribly wrong...");

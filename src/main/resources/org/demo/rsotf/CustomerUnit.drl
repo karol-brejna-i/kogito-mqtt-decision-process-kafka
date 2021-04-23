@@ -2,8 +2,8 @@ package org.demo.rsotf;
 
 unit CustomerUnit;
 
-import org.demo.rsotf.model.CustomerLocation;
 import org.demo.rsotf.model.CustomerMovement;
+import org.demo.rsotf.model.CustomerState;
 import org.demo.rsotf.model.CustomerFocus;
 import org.demo.rsotf.model.Department;
 
@@ -17,10 +17,10 @@ when
     m: /customerMovements[customer_id: id]
 then
     System.out.println(String.format("---- rule %s; customer id = %s", drools.getRule().getName(), customer_id));
-    CustomerLocation l  = storeLocationService.retrieveLocation(m);
+    CustomerState l  = storeLocationService.retrieveLocation(m);
 
     insert(l);
-    customerLocations.add(l);
+    customerState.set(l);
 end
 
 
@@ -57,17 +57,17 @@ rule "Determine focus"
 salience 50
 when
  c: /customerMovements[customer_id: id]
- l: /customerLocations[id == customer_id]
+ l: /customerState[id == customer_id]
 then
     System.out.println(String.format("---- rule %s; customer id = %s", drools.getRule().getName(), customer_id));
 
     // if customer is seen in the same location again
     if (c.getSeenIn() != null && c.getSeenIn() == l.getLastSeenIn()) {
         System.out.println("User moved around THE SAME DEPARTMENT");
-        l.setCnt(l.getCnt() + 1);
+        l.setInStateCnt(l.getInStateCnt() + 1);
     } else {
         System.out.println("Reset customer location");
-        l.setCnt(1);
+        l.setInStateCnt(1);
     }
 
     // update last position
@@ -81,7 +81,7 @@ end
 rule "Announce focused customer"
 salience 40
 when
- l: /customerLocations[cnt >= requiredNumberOfSteps]
+ l: /customerState[inStateCnt >= requiredNumberOfSteps]
 then
     System.out.println(String.format("---- rule %s; location = %s", drools.getRule().getName(), l.toString()));
 

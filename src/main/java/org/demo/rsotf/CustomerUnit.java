@@ -14,7 +14,7 @@ import java.util.List;
 public class CustomerUnit implements RuleUnitData {
     private final DataStore<Department> departmentDataStore;
     private SingletonStore<CustomerMovement> customerMovements;
-    private DataStore<CustomerLocation> customerLocations;
+    private SingletonStore<CustomerState> customerState;
     private DataStore<CustomerFocus> customerFocus;
 
     // Number of "steps" in the same department to treat a customer as focused
@@ -25,7 +25,7 @@ public class CustomerUnit implements RuleUnitData {
 
     public CustomerUnit() {
         this(DataSource.createSingleton(),
-                DataSource.createStore(),
+                DataSource.createSingleton(),
                 DataSource.createStore(),
                 DataSource.createStore(),
                 CustomerUnit.getDepartments());
@@ -34,13 +34,13 @@ public class CustomerUnit implements RuleUnitData {
 
     public CustomerUnit(
             SingletonStore<CustomerMovement> customerMovements,
-            DataStore<CustomerLocation> customerLocations,
+            SingletonStore<CustomerState> customerState,
             DataStore<CustomerFocus> customerFocus,
             DataStore<Department> departmentDataStore,
             List<Department> departments) {
 
         this.customerMovements = customerMovements;
-        this.customerLocations = customerLocations;
+        this.customerState = customerState;
         this.departmentDataStore = departmentDataStore;
 
         for (Department d : departments) {
@@ -60,12 +60,12 @@ public class CustomerUnit implements RuleUnitData {
         return departments;
     }
 
-    public DataStore<CustomerLocation> getCustomerLocations() {
-        return customerLocations;
+    public SingletonStore<CustomerState> getCustomerState() {
+        return customerState;
     }
 
-    public void setCustomerLocations(DataStore<CustomerLocation> customerLocations) {
-        this.customerLocations = customerLocations;
+    public void setCustomerState(SingletonStore<CustomerState> customerState) {
+        this.customerState = customerState;
     }
 
     public SingletonStore<CustomerMovement> getCustomerMovements() {
