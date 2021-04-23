@@ -122,7 +122,7 @@ end
 rule "Announce browsing customer"
 salience 40
 when
- s: /customerState[inStateCnt >= 10, state == CustomerStateType.BROWSING]
+ s: /customerState[inStateCnt >= 6, state == CustomerStateType.BROWSING]
 then
     System.out.println(String.format("---- rule %s; location = %s", drools.getRule().getName(), s.toString()));
 
