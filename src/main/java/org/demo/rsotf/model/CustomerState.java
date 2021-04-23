@@ -27,6 +27,7 @@ public class CustomerState {
 
     public CustomerState(String id, CustomerStateType state, int x, int y, int ts) {
         this.id = id;
+        this.state = state;
         this.x = x;
         this.y = y;
         this.ts = ts;
@@ -52,6 +53,14 @@ public class CustomerState {
 
     }
 
+    public void startBrowsingState(int ts) {
+        System.out.println("===========================> Customer starts browsing...");
+        this.state = CustomerStateType.BROWSING;
+        this.inStateSince = ts;
+        this.inStateCnt = 1;
+
+    }
+
     @Override
     public String toString() {
         return "CustomerState{" +
@@ -59,9 +68,11 @@ public class CustomerState {
                 ", x=" + x +
                 ", y=" + y +
                 ", ts=" + ts +
-                ", lastSeenIn=" + lastSeenIn +
+                ", lastSeenIn='" + lastSeenIn + '\'' +
                 ", lastSeenAt=" + lastSeenAt +
-                ", cnt=" + inStateCnt +
+                ", state=" + state +
+                ", inStateCnt=" + inStateCnt +
+                ", inStateSince=" + inStateSince +
                 '}';
     }
 
@@ -91,6 +102,14 @@ public class CustomerState {
 
     public int getTs() {
         return ts;
+    }
+
+    public void setState(CustomerStateType state) {
+        this.state = state;
+    }
+
+    public CustomerStateType getState() {
+        return state;
     }
 
     public void setTs(int ts) {
