@@ -141,24 +141,24 @@ See https://docs.confluent.io/platform/current/quickstart/ce-docker-quickstart.h
 To **create a topic**, run the following (**in the directory, where docker-compose.yml is located**):
 
 ```
-docker-compose exec broker kafka-topics --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic FOCUS_EVENT
+docker-compose exec broker kafka-topics --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic CUSTOMER_FOCUS
 ```
 
 where
 
 * `broker` is the name of the container hosting Kafka broker instance
 * `localhost:9092` is the broker's URL
-* `FOCUS_EVENT` is the topic name
+* `CUSTOMER_FOCUS` is the topic name
 
 To **subscribe to a topic**, one can issue the following command:
 
 ```sh
-docker-compose exec broker bash -c "kafka-console-consumer --bootstrap-server localhost:9092 --topic FOCUS_EVENT"
+docker-compose exec broker bash -c "kafka-console-consumer --bootstrap-server localhost:9092 --topic CUSTOMER_FOCUS"
 ```
 
 * `broker` is the name of the container hosting Kafka broker instance
 * `localhost:9092` is the broker's URL
-* `FOCUS_EVENT` is the topic name
+* `CUSTOMER_FOCUS` is the topic name
 
 #### Building and packaging
 
