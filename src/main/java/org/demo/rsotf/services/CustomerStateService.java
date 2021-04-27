@@ -17,7 +17,7 @@ public class CustomerStateService {
     }
 
     public static CustomerState locationFromMovement(CustomerStateType state, CustomerMovement m) {
-        return new CustomerState(m.getId(), state, m.getX(), m.getY(), m.getTs(), m.getSeenIn(), m.getTs(), 1, m.getTs());
+        return new CustomerState(m.getId(), state, m.getX(), m.getY(), m.getTs(), m.getSeenIn(), m.getTs(), 1, m.getTs(), 1);
     }
 
     public boolean storeLocation(CustomerState location) {

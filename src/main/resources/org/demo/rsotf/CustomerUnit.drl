@@ -25,16 +25,16 @@ then
 end
 
 
-//-- Rules regarding user location in the store
+// Rules regarding user location in the store <----
 rule "Locate department"
 salience 500
-activation-group "positionning"
+activation-group "positioning"
 no-loop
 when
- c: /customerMovements[x : x, y: y]
+ c: /customerMovements[customer_id: id, x : x, y: y]
  d: /departmentDataStore[department_id: id, getArea().contains(x, y)]
 then
-    System.out.println("------------------------------------- rule Locate department");
+    System.out.println(String.format("---- rule %s; customer id = %s", drools.getRule().getName(), customer_id));
     modify(c) {
         setSeenIn(d.getId())
    };
@@ -42,7 +42,7 @@ end
 
 rule "Location unknown"
 salience 500
-activation-group "positionning"
+activation-group "positioning"
 no-loop
 when
  c: /customerMovements[customer_id: id]
@@ -55,10 +55,10 @@ then
         setSeenIn(null)
     };
 end
-
+// ---->
 
 rule "Determine focus"
-salience 50
+salience 200
 no-loop
 when
  c: /customerMovements[customer_id: id]
@@ -82,6 +82,8 @@ then
 
     // update last position
     s.updateLastLocation(c);
+    // increment number of moves
+    s.incSequenceCnt();
     update(s);
 
     // and remember it
@@ -89,7 +91,8 @@ then
 end
 
 rule "Announce focused customer"
-salience 40
+activation-group "judging"
+salience 100
 when
  s: /customerState[inStateCnt >= requiredNumberOfSteps]
 then
@@ -98,17 +101,22 @@ then
     CustomerFocus focus = new CustomerFocus(s.getTs(), s.getId(), s.getLastSeenIn());
     customerFocus.add(focus);
     insert(focus);
+
+    // TODO reset sequenceCnt?
 end
 
 rule "Announce browsing customer"
-salience 40
+activation-group "judging"
+salience 90
 when
- s: /customerState[inStateCnt >= 6, state == CustomerStateType.BROWSING]
+ s: /customerState[sequenceCnt > 6]
 then
     System.out.println(String.format("---- rule %s; location = %s", drools.getRule().getName(), s.toString()));
 
     browsingCustomer.set(s);
     insert(s);
+
+    // TODO reset sequenceCnt?
 end
 
 //--
