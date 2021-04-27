@@ -3,6 +3,7 @@ package org.demo.rsotf.services;
 import org.demo.rsotf.model.CustomerMovement;
 import org.demo.rsotf.model.CustomerState;
 import org.demo.rsotf.model.CustomerStateType;
+import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.util.HashMap;
@@ -10,6 +11,7 @@ import java.util.Map;
 
 @ApplicationScoped
 public class CustomerStateService {
+    private static final Logger LOG = Logger.getLogger(CustomerStateService.class);
 
     private static Map<String, CustomerState> store = new HashMap<>();
 
@@ -30,7 +32,7 @@ public class CustomerStateService {
                 movement.getId(), locationFromMovement(CustomerStateType.UNKNOWN, movement));
 
         if (retrieved == null) {
-            System.out.println("Something went terribly wrong...");
+            LOG.error("Something went terribly wrong...");
         }
         return retrieved;
     }

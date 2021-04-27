@@ -75,12 +75,10 @@ public class CustomerState {
     }
 
     public void incSequenceCnt() {
-        System.out.println("incrementing sequence cnt");
         this.sequenceCnt += 1;
     }
 
     public void updateLastLocation(CustomerMovement cm) {
-        System.out.println("Update customer location with " + cm);
         this.lastSeenIn = cm.getSeenIn();
         this.lastSeenAt = cm.getTs();
 

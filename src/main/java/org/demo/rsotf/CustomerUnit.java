@@ -30,7 +30,6 @@ public class CustomerUnit implements RuleUnitData {
                 DataSource.createStore(),
                 DataSource.createStore(),
                 CustomerUnit.getDepartments(), DataSource.createSingleton());
-        System.out.println("Creating data sources");
     }
 
     public CustomerUnit(

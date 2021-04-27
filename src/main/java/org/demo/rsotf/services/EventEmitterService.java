@@ -7,6 +7,7 @@ import org.demo.rsotf.model.CustomerBrowsing;
 import org.demo.rsotf.model.CustomerState;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
+import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -14,6 +15,7 @@ import java.nio.charset.StandardCharsets;
 
 @ApplicationScoped
 public class EventEmitterService {
+    private static final Logger LOG = Logger.getLogger(EventEmitterService.class);
 
     @Inject
     @Channel("sink")
@@ -27,17 +29,15 @@ public class EventEmitterService {
     }
 
     public void publish(CustomerState payload) {
-        System.out.println("Emitting payload: " + payload);
+        LOG.info("Emitting payload: " + payload);
         CustomerBrowsing message = CustomerBrowsing.fromCustomerState(payload);
         String json = null;
         try {
             json = mapper.writeValueAsString(message);
-            System.out.println("Marshalled payload: " + json);
+            LOG.debug("Marshalled payload: " + json);
             emitter.send(json.getBytes(StandardCharsets.UTF_8));
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            System.out.println("Failed to marshall the payload!");
+            LOG.error("Failed to marshall the payload!", e);
         }
     }
-
 }
