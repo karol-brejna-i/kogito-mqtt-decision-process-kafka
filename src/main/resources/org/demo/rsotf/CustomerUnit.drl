@@ -8,9 +8,9 @@ import org.demo.rsotf.model.CustomerState;
 import org.demo.rsotf.model.CustomerFocus;
 import org.demo.rsotf.model.Department;
 
-import org.demo.rsotf.services.StoreLocationService;
+import org.demo.rsotf.services.CustomerStateService;
 
-global StoreLocationService storeLocationService
+global CustomerStateService customerStateService
 
 rule "Retrieve previous location"
 salience 1000
@@ -18,7 +18,7 @@ when
     m: /customerMovements[customer_id: id]
 then
     System.out.println(String.format("---- rule %s; customer id = %s", drools.getRule().getName(), customer_id));
-    CustomerState l  = storeLocationService.retrieveLocation(m);
+    CustomerState l  = customerStateService.retrieveLocation(m);
 
     insert(l);
     customerState.set(l);
@@ -27,8 +27,9 @@ end
 
 //-- Rules regarding user location in the store
 rule "Locate department"
-salience 100
+salience 500
 activation-group "positionning"
+no-loop
 when
  c: /customerMovements[x : x, y: y]
  d: /departmentDataStore[department_id: id, getArea().contains(x, y)]
@@ -40,8 +41,9 @@ then
 end
 
 rule "Location unknown"
-salience 90
+salience 500
 activation-group "positionning"
+no-loop
 when
  c: /customerMovements[customer_id: id]
  s: /customerState[id == customer_id]
@@ -52,18 +54,12 @@ then
     modify(c) {
         setSeenIn(null)
     };
-    // the user is in none of known, departments, so assume he is browsing
-    modify(s) {
-       setState(CustomerStateType.BROWSING)
-    };
-
 end
-//--
 
 
-//-- Rules determining customer focus
 rule "Determine focus"
 salience 50
+no-loop
 when
  c: /customerMovements[customer_id: id]
  s: /customerState[id == customer_id]
@@ -75,42 +71,27 @@ then
     System.out.println();
 
     // if customer is seen in the same location again
-
-    if (c.getSeenIn() != null) {
-        System.out.println("the location is known, let's check if it's changed");
-        // the location is known, let's check if it's changed
-        if (c.getSeenIn() == s.getLastSeenIn()) {
-            System.out.println("User moved around THE SAME DEPARTMENT");
-            s.setInStateCnt(s.getInStateCnt() + 1);
-            s.setState(CustomerStateType.IN_DEPARTMENT);
-        } else {
-            // start browsing state
-            s.startBrowsingState(s.getTs());
-        }
+    if (c.getSeenIn() != null && c.getSeenIn() == s.getLastSeenIn()) {
+        System.out.println("User moved around THE SAME DEPARTMENT");
+        s.incStateCnt();
     } else {
-        System.out.println("he is in unknown location, if it was unknown last time, too");
-        // he is in unknown location, if it was unknown last time, too
-        if (c.getSeenIn() == s.getLastSeenIn()) {
-            s.setInStateCnt(s.getInStateCnt() + 1);
-            System.out.println("location still unknown...");
-        } else {
-            // start browsing state
-            s.startBrowsingState(s.getTs());
-        }
+        // customer in unknown location or changed department
+        System.out.println("customer in unknown location or changed department");
+        s.resetStateCnt();
     }
 
     // update last position
-    s.update(c);
+    s.updateLastLocation(c);
     update(s);
 
     // and remember it
-    storeLocationService.storeLocation(s);
+    customerStateService.storeLocation(s);
 end
 
 rule "Announce focused customer"
 salience 40
 when
- s: /customerState[inStateCnt >= requiredNumberOfSteps, state != CustomerStateType.BROWSING]
+ s: /customerState[inStateCnt >= requiredNumberOfSteps]
 then
     System.out.println(String.format("---- rule %s; location = %s", drools.getRule().getName(), s.toString()));
 

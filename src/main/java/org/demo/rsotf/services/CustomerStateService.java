@@ -9,11 +9,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 @ApplicationScoped
-public class StoreLocationService {
+public class CustomerStateService {
 
     private static Map<String, CustomerState> store = new HashMap<>();
 
-    public StoreLocationService() {
+    public CustomerStateService() {
     }
 
     public static CustomerState locationFromMovement(CustomerStateType state, CustomerMovement m) {
@@ -21,12 +21,12 @@ public class StoreLocationService {
     }
 
     public boolean storeLocation(CustomerState location) {
-        CustomerState stored = StoreLocationService.store.put(location.getId(), location);
+        CustomerState stored = CustomerStateService.store.put(location.getId(), location);
         return true;
     }
 
     public CustomerState retrieveLocation(CustomerMovement movement) {
-        CustomerState retrieved = StoreLocationService.store.getOrDefault(
+        CustomerState retrieved = CustomerStateService.store.getOrDefault(
                 movement.getId(), locationFromMovement(CustomerStateType.UNKNOWN, movement));
 
         if (retrieved == null) {

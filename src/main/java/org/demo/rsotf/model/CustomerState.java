@@ -43,7 +43,24 @@ public class CustomerState {
         this.inStateSince = inStateSince;
     }
 
-    public void update(CustomerMovement cm) {
+
+    public void startBrowsingState(int ts) {
+        System.out.println("===========================> Customer starts browsing...");
+        this.state = CustomerStateType.BROWSING;
+        this.inStateSince = ts;
+        this.inStateCnt = 1;
+
+    }
+
+    public void incStateCnt() {
+        this.inStateCnt += 1;
+    }
+
+    public void resetStateCnt() {
+        this.inStateCnt = 0;
+    }
+
+    public void updateLastLocation(CustomerMovement cm) {
         System.out.println("Update customer location with " + cm);
         this.lastSeenIn = cm.getSeenIn();
         this.lastSeenAt = cm.getTs();
@@ -53,13 +70,6 @@ public class CustomerState {
 
     }
 
-    public void startBrowsingState(int ts) {
-        System.out.println("===========================> Customer starts browsing...");
-        this.state = CustomerStateType.BROWSING;
-        this.inStateSince = ts;
-        this.inStateCnt = 1;
-
-    }
 
     @Override
     public String toString() {

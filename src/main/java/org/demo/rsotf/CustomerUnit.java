@@ -1,7 +1,7 @@
 package org.demo.rsotf;
 
 import org.demo.rsotf.model.*;
-import org.demo.rsotf.services.StoreLocationService;
+import org.demo.rsotf.services.CustomerStateService;
 import org.kie.kogito.rules.DataSource;
 import org.kie.kogito.rules.DataStore;
 import org.kie.kogito.rules.RuleUnitData;
@@ -22,7 +22,7 @@ public class CustomerUnit implements RuleUnitData {
     private int requiredNumberOfSteps = 3;
 
     @Inject
-    private StoreLocationService storeLocationService;
+    private CustomerStateService customerStateService;
 
     public CustomerUnit() {
         this(DataSource.createSingleton(),
@@ -49,7 +49,7 @@ public class CustomerUnit implements RuleUnitData {
             departmentDataStore.add(d);
         }
 
-        this.storeLocationService = new StoreLocationService();
+        this.customerStateService = new CustomerStateService();
     }
 
     private static List<Department> getDepartments() {
@@ -78,12 +78,12 @@ public class CustomerUnit implements RuleUnitData {
         this.customerMovements = customerMovements;
     }
 
-    public StoreLocationService getStoreLocationService() {
-        return storeLocationService;
+    public CustomerStateService getCustomerStateService() {
+        return customerStateService;
     }
 
-    public void setStoreLocationService(StoreLocationService storeLocationService) {
-        this.storeLocationService = storeLocationService;
+    public void setCustomerStateService(CustomerStateService customerStateService) {
+        this.customerStateService = customerStateService;
     }
 
     public DataStore<Department> getDepartmentDataStore() {
