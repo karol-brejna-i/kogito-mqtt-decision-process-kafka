@@ -1,6 +1,6 @@
 package org.demo.rsotf.model;
 
-public class CustomerLocation {
+public class CustomerState {
     private String id;
     private int x;
     private int y;
@@ -12,27 +12,35 @@ public class CustomerLocation {
     // When previous location was observed
     private int lastSeenAt;
 
-    private int cnt;
+    // current customer state
+    private CustomerStateType state = CustomerStateType.UNKNOWN;
+
+    // how many steps in given state
+    private int inStateCnt;
+
+    // when the state begun (timestamp)
+    private int inStateSince;
 
     // Jackson likes this for deserialization
-    public CustomerLocation() {
+    public CustomerState() {
     }
 
-    public CustomerLocation(String id, int x, int y, int ts) {
+    public CustomerState(String id, CustomerStateType state, int x, int y, int ts) {
         this.id = id;
+        this.state = state;
         this.x = x;
         this.y = y;
         this.ts = ts;
+        this.inStateSince = ts;
+        this.inStateCnt = 1;
     }
 
-    public CustomerLocation(String id, int x, int y, int ts, String lastSeenIn, int lastSeenAt, int cnt) {
-        this.id = id;
-        this.x = x;
-        this.y = y;
-        this.ts = ts;
+    public CustomerState(String id, CustomerStateType state, int x, int y, int ts, String lastSeenIn, int lastSeenAt, int inStateCnt, int inStateSince) {
+        this(id, state, x, y, ts);
         this.lastSeenIn = lastSeenIn;
         this.lastSeenAt = lastSeenAt;
-        this.cnt = cnt;
+        this.inStateCnt = inStateCnt;
+        this.inStateSince = inStateSince;
     }
 
     public void update(CustomerMovement cm) {
@@ -45,16 +53,26 @@ public class CustomerLocation {
 
     }
 
+    public void startBrowsingState(int ts) {
+        System.out.println("===========================> Customer starts browsing...");
+        this.state = CustomerStateType.BROWSING;
+        this.inStateSince = ts;
+        this.inStateCnt = 1;
+
+    }
+
     @Override
     public String toString() {
-        return "CustomerLocation{" +
+        return "CustomerState{" +
                 "id='" + id + '\'' +
                 ", x=" + x +
                 ", y=" + y +
                 ", ts=" + ts +
-                ", lastSeenIn=" + lastSeenIn +
+                ", lastSeenIn='" + lastSeenIn + '\'' +
                 ", lastSeenAt=" + lastSeenAt +
-                ", cnt=" + cnt +
+                ", state=" + state +
+                ", inStateCnt=" + inStateCnt +
+                ", inStateSince=" + inStateSince +
                 '}';
     }
 
@@ -86,6 +104,14 @@ public class CustomerLocation {
         return ts;
     }
 
+    public void setState(CustomerStateType state) {
+        this.state = state;
+    }
+
+    public CustomerStateType getState() {
+        return state;
+    }
+
     public void setTs(int ts) {
         this.ts = ts;
     }
@@ -106,11 +132,11 @@ public class CustomerLocation {
         this.lastSeenAt = lastSeenAt;
     }
 
-    public int getCnt() {
-        return cnt;
+    public int getInStateCnt() {
+        return inStateCnt;
     }
 
-    public void setCnt(int cnt) {
-        this.cnt = cnt;
+    public void setInStateCnt(int inStateCnt) {
+        this.inStateCnt = inStateCnt;
     }
 }

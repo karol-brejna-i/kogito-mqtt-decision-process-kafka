@@ -1,5 +1,3 @@
-# mqtt-decision-process-kafka project
-
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
 If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
@@ -52,14 +50,3 @@ You can then execute your native executable with: `./target/mqtt-decision-proces
 If you want to learn more about building native executables, please consult https://quarkus.io/guides/maven-tooling.html
 .
 
-## Related guides
-
-- RESTEasy JAX-RS ([guide](https://quarkus.io/guides/rest-json)): REST endpoint framework implementing JAX-RS and more
-
-## Provided examples
-
-### RESTEasy JAX-RS example
-
-REST is easy peasy with this Hello World RESTEasy resource.
-
-[Related guide section...](https://quarkus.io/guides/getting-started#the-jax-rs-resources)

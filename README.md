@@ -1,7 +1,33 @@
 # Customer Movement Decision Service
 
-## Description
-TODO
+This project is have-fun-with kind of experiment intended to familiarize myself with Kogito.
+
+The service developed here is a part of imaginary scenario:
+
+Let's assume that there is a retail store that has customer tracking ability (through beacons and mobile app used by the
+customer). The app informs the system about current customer location (with MQTT messages). Based on that data, we want
+to be able to determine, if a given customer is interested in any particular kind of goods
+(in our case: is spending significant time in a given Department.)
+
+## Service overview
+
+![](./doc/process_overview.png)
+
+The decision process begins with a MQTT message. The message reflects a customer movement around a store.
+
+Then business rules (DRL) are used to:
+
+* identify the department that the customers is currently in
+* check how much time he spent in that department (more accurately: how many consequent "moves" he made in that area);
+  if he spent some desired time there, the service rules out that he is focused in a given area
+  (so, we could probably send him a promo coupon, send notification to the staff to help him out, etc.)
+
+When a focused customer is identified, a proper Kafka message is sent.
+
+
+
+
+
 
 ## Local development/testing
 
@@ -40,10 +66,11 @@ CUSTOMER_FOCUS' by default). In order to verify that, one could use `kafka-consu
 MQTT and Kafka brokers addresses and topics are defined in [application.properties](./src/main/resources/application.properties).
 
 [org.demo.rsotf.CustomerUnit](./src/main/java/org/demo/rsotf/CustomerUnit.java) class holds definition of the
-departments (symbols, area on the map) and the number of consequent steps (that customer makes in the same department) 
+departments (symbols, area on the map) and the number of consequent steps (that customer makes in the same department)
 to decide, he is focused there.
 
 Change the following fragments according to your needs:
+
 ```java
 private int requiredNumberOfSteps=3;
 ```
@@ -91,6 +118,7 @@ docker exec mosquitto mosquitto_pub -h 127.0.0.1 -t "customer/move" -m '{"id":"3
 ```
 
 Publishing the same message a few times:
+
 ```shell
 docker exec mosquitto /bin/sh -c "for i in 1 2 3 4 5; do mosquitto_pub -i client_id -h 127.0.0.1 -t \"customer/move\" -m '{\"id\":\"3\",\"ts\":0,\"x\":550,\"y\":550}'; done"
 ```
@@ -122,7 +150,7 @@ where
 * `localhost:9092` is the broker's URL
 * `FOCUS_EVENT` is the topic name
 
-To **subscribe to a topoic**, one can issue the following command:
+To **subscribe to a topic**, one can issue the following command:
 
 ```sh
 docker-compose exec broker bash -c "kafka-console-consumer --bootstrap-server localhost:9092 --topic FOCUS_EVENT"
@@ -131,3 +159,12 @@ docker-compose exec broker bash -c "kafka-console-consumer --bootstrap-server lo
 * `broker` is the name of the container hosting Kafka broker instance
 * `localhost:9092` is the broker's URL
 * `FOCUS_EVENT` is the topic name
+
+#### Building and packaging
+
+For building and packaging information see: [packaging.md](./packaging.md)
+
+### Implementation walkthrough
+
+For the details about how particular parts of the service were implemented, take a look
+at [implemantation_walkthrough.md](./implemantation_walkthrough.md).

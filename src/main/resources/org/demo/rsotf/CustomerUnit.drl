@@ -2,8 +2,9 @@ package org.demo.rsotf;
 
 unit CustomerUnit;
 
-import org.demo.rsotf.model.CustomerLocation;
+import org.demo.rsotf.model.CustomerStateType
 import org.demo.rsotf.model.CustomerMovement;
+import org.demo.rsotf.model.CustomerState;
 import org.demo.rsotf.model.CustomerFocus;
 import org.demo.rsotf.model.Department;
 
@@ -16,11 +17,11 @@ salience 1000
 when
     m: /customerMovements[customer_id: id]
 then
-    System.out.println("------------------------------------- rule ENTRY; customer id = " + customer_id);
-    CustomerLocation l  = storeLocationService.retrieveLocation(m);
-    //System.out.println("l: " + l);
+    System.out.println(String.format("---- rule %s; customer id = %s", drools.getRule().getName(), customer_id));
+    CustomerState l  = storeLocationService.retrieveLocation(m);
+
     insert(l);
-    customerLocations.add(l);
+    customerState.set(l);
 end
 
 
@@ -38,17 +39,24 @@ then
    };
 end
 
-rule "Nowhere"
+rule "Location unknown"
 salience 90
 activation-group "positionning"
 when
  c: /customerMovements[customer_id: id]
+ s: /customerState[id == customer_id]
 then
-    System.out.println("------------------------------------- rule Nowhere; customer id = " + customer_id);
-    //System.out.println(drools.getRule().getName());
+    System.out.println(String.format("---- rule %s; customer id = %s", drools.getRule().getName(), customer_id));
+
+    // set the location (seen in) to unknown (null)
     modify(c) {
         setSeenIn(null)
-   };
+    };
+    // the user is in none of known, departments, so assume he is browsing
+    modify(s) {
+       setState(CustomerStateType.BROWSING)
+    };
+
 end
 //--
 
@@ -58,53 +66,76 @@ rule "Determine focus"
 salience 50
 when
  c: /customerMovements[customer_id: id]
- l: /customerLocations[id == customer_id]
+ s: /customerState[id == customer_id]
 then
-    System.out.println("------------------------------------- sprawdzam focus; customer id = " + customer_id);
-    //System.out.println(drools.getRule().getName());
+    System.out.println(String.format("---- rule %s; customer id = %s", drools.getRule().getName(), customer_id));
+
+    System.out.println();
+    System.out.println("State: " + s);
+    System.out.println();
 
     // if customer is seen in the same location again
-    if (c.getSeenIn() != null && c.getSeenIn() == l.getLastSeenIn()) {
-        System.out.println("User moved around THE SAME DEPARTMENT");
-        l.setCnt(l.getCnt() + 1);
+
+    if (c.getSeenIn() != null) {
+        System.out.println("the location is known, let's check if it's changed");
+        // the location is known, let's check if it's changed
+        if (c.getSeenIn() == s.getLastSeenIn()) {
+            System.out.println("User moved around THE SAME DEPARTMENT");
+            s.setInStateCnt(s.getInStateCnt() + 1);
+            s.setState(CustomerStateType.IN_DEPARTMENT);
+        } else {
+            // start browsing state
+            s.startBrowsingState(s.getTs());
+        }
     } else {
-        System.out.println("Reset customer location");
-        l.setCnt(1);
+        System.out.println("he is in unknown location, if it was unknown last time, too");
+        // he is in unknown location, if it was unknown last time, too
+        if (c.getSeenIn() == s.getLastSeenIn()) {
+            s.setInStateCnt(s.getInStateCnt() + 1);
+            System.out.println("location still unknown...");
+        } else {
+            // start browsing state
+            s.startBrowsingState(s.getTs());
+        }
     }
 
     // update last position
-    l.update(c);
-    update(l);
+    s.update(c);
+    update(s);
 
-    //System.out.println("New L: " + l);
-    storeLocationService.storeLocation(l);
-    //System.out.println("After storing location");
+    // and remember it
+    storeLocationService.storeLocation(s);
 end
 
-rule "Is focused"
+rule "Announce focused customer"
 salience 40
 when
- l: /customerLocations[cnt >= requiredNumberOfSteps]
+ s: /customerState[inStateCnt >= requiredNumberOfSteps, state != CustomerStateType.BROWSING]
 then
-    System.out.println("------------------------------------- sprawdzam Is focused");
-    System.out.println("l: " + l);
-    CustomerFocus focus = new CustomerFocus(l.getTs(), l.getId(), l.getLastSeenIn());
+    System.out.println(String.format("---- rule %s; location = %s", drools.getRule().getName(), s.toString()));
+
+    CustomerFocus focus = new CustomerFocus(s.getTs(), s.getId(), s.getLastSeenIn());
     customerFocus.add(focus);
     insert(focus);
 end
-//--
 
-rule "Testowo Is not focused"
+rule "Announce browsing customer"
 salience 40
 when
- l: /customerLocations[cnt < requiredNumberOfSteps]
+ s: /customerState[inStateCnt >= 6, state == CustomerStateType.BROWSING]
 then
-     // do nothing
-     System.out.println("------------------------------------- entered " + drools.getRule().getName());
-     System.out.println("l: " + l);
+    System.out.println(String.format("---- rule %s; location = %s", drools.getRule().getName(), s.toString()));
+
+    browsingCustomer.set(s);
+    insert(s);
 end
 
+//--
 
 query FindFocused
+    $c : /customerFocus
+end
+
+query FindBrowsing
     $c : /customerFocus
 end
