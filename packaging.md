@@ -45,8 +45,9 @@ Or, if you don't have GraalVM installed, you can run the native executable build
 ./mvnw package -Pnative -Dquarkus.native.container-build=true
 ```
 
-You can then execute your native executable with: `./target/mqtt-decision-process-kafka-1.0-SNAPSHOT-runner`
+You can then execute your native binary with: `./target/mqtt-decision-process-kafka-1.0-SNAPSHOT-runner`
 
 If you want to learn more about building native executables, please consult https://quarkus.io/guides/maven-tooling.html
 .
 
+## Creating a Docker container
