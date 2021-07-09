@@ -82,8 +82,6 @@ Example of payload: ` { "id": "127", "ts": 192322800, "x": 0, "y": 0}`
 ## Receiving MQTT messages
 TODO
 
-## Publishing Kafka messages
-TODO
 
 ## Business rules
 In this implementation we use these features of business rules engine:
