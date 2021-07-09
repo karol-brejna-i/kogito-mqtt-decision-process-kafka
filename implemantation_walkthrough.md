@@ -80,7 +80,20 @@ Example of payload: ` { "id": "127", "ts": 192322800, "x": 0, "y": 0}`
 # Implementation
 
 ## Receiving MQTT messages
-TODO
+A typical BPMN business process, among other steps, includes _start events_.
+Start events are used to initiate the process. On of Kogito's supported start event components 
+(see: https://docs.jboss.org/kogito/release/latest/html_single/#ref-bpmn-support_kogito-developing-process-services)
+is _Message_. 
+
+ATTOW, the component has the following representation in Kogito's BMPN editor: ![](doc/start_message.png)
+
+This is exactly what we want. In our case, we plan to make a business decision upon arrival of MQTT message,
+so our process starts with start message component ('moves').
+
+
+
+
+
 
 
 ## Business rules
