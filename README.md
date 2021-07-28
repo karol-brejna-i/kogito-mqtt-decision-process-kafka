@@ -148,7 +148,7 @@ docker exec mosquitto mosquitto_sub -h 127.0.0.1 -t ""
 
 For building and packaging information see: [packaging.md](./packaging.md)
 
-### Implementation walkthrough
+### Implementation walk-through
 
 For the details about how particular parts of the service were implemented, take a look
 at [implemantation_walkthrough.md](./implemantation_walkthrough.md).

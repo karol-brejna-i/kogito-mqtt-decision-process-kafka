@@ -2,8 +2,8 @@ package org.demo.rsotf.model;
 
 public class CustomerState {
     private String id;
-    private int x;
-    private int y;
+    private float x;
+    private float y;
     private int ts;
 
     // Where he was previously
@@ -29,7 +29,7 @@ public class CustomerState {
     public CustomerState() {
     }
 
-    public CustomerState(String id, CustomerStateType state, int x, int y, int ts) {
+    public CustomerState(String id, CustomerStateType state, float x, float y, int ts) {
         this.id = id;
         this.state = state;
         this.x = x;
@@ -40,7 +40,7 @@ public class CustomerState {
         this.sequenceCnt = 1;
     }
 
-    public CustomerState(String id, CustomerStateType state, int x, int y, int ts, String lastSeenIn, int lastSeenAt, int inStateCnt, int inStateSince, int sequenceCnt) {
+    public CustomerState(String id, CustomerStateType state, float x, float y, int ts, String lastSeenIn, int lastSeenAt, int inStateCnt, int inStateSince, int sequenceCnt) {
         this(id, state, x, y, ts);
         this.lastSeenIn = lastSeenIn;
         this.lastSeenAt = lastSeenAt;
@@ -110,19 +110,19 @@ public class CustomerState {
         this.id = id;
     }
 
-    public int getX() {
+    public float getX() {
         return x;
     }
 
-    public void setX(int x) {
+    public void setX(float x) {
         this.x = x;
     }
 
-    public int getY() {
+    public float getY() {
         return y;
     }
 
-    public void setY(int y) {
+    public void setY(float y) {
         this.y = y;
     }
 

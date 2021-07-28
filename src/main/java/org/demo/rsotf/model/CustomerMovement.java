@@ -2,8 +2,8 @@ package org.demo.rsotf.model;
 
 public class CustomerMovement {
     private String id;
-    private int x;
-    private int y;
+    private float x;
+    private float y;
     private int ts;
 
     private String seenIn;
@@ -23,11 +23,11 @@ public class CustomerMovement {
         return id;
     }
 
-    public int getX() {
+    public float getX() {
         return x;
     }
 
-    public void setX(int x) {
+    public void setX(float x) {
         this.x = x;
     }
 
@@ -35,11 +35,11 @@ public class CustomerMovement {
         this.id = id;
     }
 
-    public int getY() {
+    public float getY() {
         return y;
     }
 
-    public void setY(int y) {
+    public void setY(float y) {
         this.y = y;
     }
 
