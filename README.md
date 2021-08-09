@@ -72,11 +72,11 @@ The following environment variables can be used to change the values:
 
 | name | default value | description   |
 |------|---------------|---------------|
-| MQTT_TOPIC_MOVE     | customer/move | incoming topic for customer position messages |
-| MQTT_TOPIC_FOCUS    | customer/focus | outgoing topic for notification about focused customer |
-| MQTT_TOPIC_BROWSING | customer/browsing | outgoing topic for notification about customer that is browsing around |
-| MQTT_HOST           | 127.0.0.1     | MQTT broker's host |
-| MQTT_PORT           | 1883          | MQTT broker's port |
+| MOVE_TOPIC           | customer/move | incoming topic for customer position messages |
+| FOCUS_TOPIC          | customer/focus | outgoing topic for notification about focused customer |
+| BROWSE_TOPIC         | customer/browsing | outgoing topic for notification about customer that is browsing around |
+| MQTT_HOST            | 127.0.0.1     | MQTT broker's host |
+| MQTT_PORT            | 1883          | MQTT broker's port |
 
 
 [org.demo.rsotf.CustomerUnit](./src/main/java/org/demo/rsotf/CustomerUnit.java) class holds definition of the
@@ -90,15 +90,15 @@ private int requiredNumberOfSteps=3;
 ```
 
 ```java
-private static List<Department> getDepartments(){
-        List<Department> departments=new LinkedList<>();
-        departments.add(new Department("Women",new Area(444,443,666,879),""));
-        departments.add(new Department("Boys",new Area(672,443,992,658),""));
-        departments.add(new Department("Girls",new Area(998,443,1317,658),""));
-        departments.add(new Department("Men",new Area(672,664,1317,879),""));
-        departments.add(new Department("Sports",new Area(614,984,1186,1292),""));
-        return departments;
-        }
+private static List<Department> getDepartments() {
+    List<Department> departments = new LinkedList<>();
+    departments.add(new Department("Boy's",   new Area(0.10, 0.20,  1.70, 8.00), ""));
+    departments.add(new Department("Girl's",  new Area(0.10, 8.10,  4.20, 13.05), ""));
+    departments.add(new Department("Women's", new Area(4.30, 8.10,  15.00, 13.05), ""));
+    departments.add(new Department("Men's",   new Area(4.30, 0.20,  13.70, 5.50), ""));
+    departments.add(new Department("Sport",  new Area(15.10, 8.10,  18.00, 13.05), ""));
+    return departments;
+}
 ```
 
 (The config should be externalized and available through a config file/environment variables...)

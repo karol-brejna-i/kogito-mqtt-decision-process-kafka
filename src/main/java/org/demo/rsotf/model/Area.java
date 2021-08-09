@@ -2,9 +2,9 @@ package org.demo.rsotf.model;
 
 public class Area {
 
-    private float x0, y0, x1, y1;
+    private double x0, y0, x1, y1;
 
-    public Area(float x0, float y0, float x1, float y1) {
+    public Area(double x0, double y0, double x1, double y1) {
         if (x0 <= x1) {
             this.x0 = x0; this.x1 = x1;
         } else {
@@ -18,7 +18,7 @@ public class Area {
         }
     }
 
-    public boolean contains(float x, float y) {
+    public boolean contains(double x, double y) {
         return x0 <= x && x <= x1 && y0 <= y && y <= y1 ;
     }
 }

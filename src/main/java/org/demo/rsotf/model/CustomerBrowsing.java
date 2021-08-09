@@ -9,13 +9,16 @@ public class CustomerBrowsing {
     /** Event timestamp (unix time) */
     private int ts;
     /** Last known customer location - x */
-    private float x;
+    private double x;
     /** Last known customer location - y */
-    private float y;
+    private double y;
     /** Last known customer location - department (if known) */
     private String department;
 
-    public CustomerBrowsing(String id, int ts, float x, float y, String department) {
+    public CustomerBrowsing() {
+    }
+
+    public CustomerBrowsing(String id, int ts, double x, double y, String department) {
         this.id = id;
         this.ts = ts;
         this.x = x;
@@ -50,19 +53,19 @@ public class CustomerBrowsing {
         this.ts = ts;
     }
 
-    public float getX() {
+    public double getX() {
         return x;
     }
 
-    public void setX(float x) {
+    public void setX(double x) {
         this.x = x;
     }
 
-    public float getY() {
+    public double getY() {
         return y;
     }
 
-    public void setY(float y) {
+    public void setY(double y) {
         this.y = y;
     }
 

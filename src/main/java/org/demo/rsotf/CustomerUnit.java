@@ -53,11 +53,11 @@ public class CustomerUnit implements RuleUnitData {
 
     private static List<Department> getDepartments() {
         List<Department> departments = new LinkedList<>();
-        departments.add(new Department("Women", new Area(444, 443,  666, 879), ""));
-        departments.add(new Department("Boys",  new Area(672, 443,  992, 658), ""));
-        departments.add(new Department("Girls", new Area(998, 443, 1317, 658), ""));
-        departments.add(new Department("Men",   new Area(672, 664, 1317, 879), ""));
-        departments.add(new Department("Sports",new Area(614, 984, 1186, 1292), ""));
+        departments.add(new Department("Boy's",   new Area(0.10, 0.20,  1.70, 8.00), ""));
+        departments.add(new Department("Girl's",  new Area(0.10, 8.10,  4.20, 13.05), ""));
+        departments.add(new Department("Women's", new Area(4.30, 8.10,  15.00, 13.05), ""));
+        departments.add(new Department("Men's",   new Area(4.30, 0.20,  13.70, 5.50), ""));
+        departments.add(new Department("Sport",  new Area(15.10, 8.10,  18.00, 13.05), ""));
         return departments;
     }
 
