@@ -3,6 +3,7 @@ package org.demo.rsotf.model;
 /**
  * Represents message sent to MQTT when customer is browsing.
  */
+@RegisterForReflection
 public class CustomerBrowsing {
     /** Customer id */
     private String id;
