@@ -1,4 +1,5 @@
 package org.demo.rsotf.model;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 
 /**
  * Represents message sent to MQTT when customer is browsing.
