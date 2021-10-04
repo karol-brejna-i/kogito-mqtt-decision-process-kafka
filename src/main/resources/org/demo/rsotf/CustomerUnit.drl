@@ -98,7 +98,7 @@ when
 then
     System.out.println(String.format("---- rule %s; location = %s", drools.getRule().getName(), s.toString()));
 
-    CustomerFocus focus = new CustomerFocus(s.getTs(), s.getId(), s.getLastSeenIn());
+    CustomerFocus focus = new CustomerFocus(s.getId().toString(), s.getTs(), s.getLastSeenIn());
     customerFocus.add(focus);
     insert(focus);
 

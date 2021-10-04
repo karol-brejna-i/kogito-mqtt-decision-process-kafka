@@ -19,24 +19,18 @@ public class CustomerUnit implements RuleUnitData {
     private SingletonStore<CustomerState> browsingCustomer;
 
     // Number of "steps" in the same department to treat a customer as focused
-    private int requiredNumberOfSteps = 3;
+    private int requiredNumberOfSteps = 4;
 
     @Inject
     private CustomerStateService customerStateService;
 
     public CustomerUnit() {
-        this(DataSource.createSingleton(),
-                DataSource.createSingleton(),
-                DataSource.createStore(),
-                DataSource.createStore(),
-                CustomerUnit.getDepartments(), DataSource.createSingleton());
+        this(DataSource.createSingleton(), DataSource.createSingleton(), DataSource.createStore(),
+                DataSource.createStore(), CustomerUnit.getDepartments(), DataSource.createSingleton());
     }
 
-    public CustomerUnit(
-            SingletonStore<CustomerMovement> customerMovements,
-            SingletonStore<CustomerState> customerState,
-            DataStore<CustomerFocus> customerFocus,
-            DataStore<Department> departmentDataStore,
+    public CustomerUnit(SingletonStore<CustomerMovement> customerMovements, SingletonStore<CustomerState> customerState,
+            DataStore<CustomerFocus> customerFocus, DataStore<Department> departmentDataStore,
             List<Department> departments, SingletonStore<CustomerState> browsingCustomer) {
 
         this.customerMovements = customerMovements;
@@ -53,11 +47,11 @@ public class CustomerUnit implements RuleUnitData {
 
     private static List<Department> getDepartments() {
         List<Department> departments = new LinkedList<>();
-        departments.add(new Department("Boy's",   new Area(0.10, 0.20,  1.70, 8.00), ""));
-        departments.add(new Department("Girl's",  new Area(0.10, 8.10,  4.20, 13.05), ""));
-        departments.add(new Department("Women's", new Area(4.30, 8.10,  15.00, 13.05), ""));
-        departments.add(new Department("Men's",   new Area(4.30, 0.20,  13.70, 5.50), ""));
-        departments.add(new Department("Sport",  new Area(15.10, 8.10,  18.00, 13.05), ""));
+        departments.add(new Department("Boys", new Area(672, 443, 992, 658), ""));
+        departments.add(new Department("Girls", new Area(998, 443, 1317, 658), ""));
+        departments.add(new Department("Women", new Area(444, 443, 666, 879), ""));
+        departments.add(new Department("Men", new Area(672, 664, 1317, 879), ""));
+        departments.add(new Department("Sport", new Area(614, 984, 1186, 1292), ""));
         return departments;
     }
 
