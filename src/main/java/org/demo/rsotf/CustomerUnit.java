@@ -20,6 +20,7 @@ public class CustomerUnit implements RuleUnitData {
 
     // Number of "steps" in the same department to treat a customer as focused
     private int requiredNumberOfSteps = 4;
+    private int requiredBrowsingNumberOfSteps = 20;
 
     @Inject
     private CustomerStateService customerStateService;
@@ -105,5 +106,13 @@ public class CustomerUnit implements RuleUnitData {
 
     public void setBrowsingCustomer(SingletonStore<CustomerState> browsingCustomer) {
         this.browsingCustomer = browsingCustomer;
+    }
+
+    public int getRequiredBrowsingNumberOfSteps() {
+        return requiredBrowsingNumberOfSteps;
+    }
+
+    public void setRequiredBrowsingNumberOfSteps(int requiredBrowsingNumberOfSteps) {
+        this.requiredBrowsingNumberOfSteps = requiredBrowsingNumberOfSteps;
     }
 }
