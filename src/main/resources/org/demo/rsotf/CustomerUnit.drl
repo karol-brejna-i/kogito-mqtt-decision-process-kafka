@@ -64,6 +64,17 @@ when
  c: /customerMovements[customer_id: id]
  s: /customerState[id == customer_id]
 then
+    // reset state after 20 seconds with no move (customer left the shop)
+    long now = System.currentTimeMillis() / 1000;
+    long ts = s.getLastSeenAt();
+
+    if(ts + 20 < now) {
+        System.out.println("---- stepCounter reset ----");
+        s.setFocusCounter(0);
+        s.setStepCounter(0);
+        update(s);
+    }
+
     System.out.println(String.format("---- rule %s; customer id = %s", drools.getRule().getName(), customer_id));
 
     System.out.println();
