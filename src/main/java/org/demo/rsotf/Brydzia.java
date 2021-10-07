@@ -8,7 +8,7 @@ import javax.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class Brydzia {
 
-    @Incoming("jeden")
+    @Incoming("source")
     @Outgoing("kogito_incoming_stream")
     public String deserialize(byte[] payload) {
         return new String(payload);

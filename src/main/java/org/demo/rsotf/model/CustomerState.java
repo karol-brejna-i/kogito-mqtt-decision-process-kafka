@@ -2,8 +2,8 @@ package org.demo.rsotf.model;
 
 public class CustomerState {
     private String id;
-    private int x;
-    private int y;
+    private double x;
+    private double y;
     private int ts;
 
     // Where he was previously
@@ -13,6 +13,7 @@ public class CustomerState {
     private int lastSeenAt;
 
     // current customer state
+    @Deprecated
     private CustomerStateType state = CustomerStateType.UNKNOWN;
 
     // how many steps in given state
@@ -21,11 +22,14 @@ public class CustomerState {
     // when the state begun (timestamp)
     private int inStateSince;
 
+    // number of moves in current sequence (regardless the state)
+    private int sequenceCnt;
+
     // Jackson likes this for deserialization
     public CustomerState() {
     }
 
-    public CustomerState(String id, CustomerStateType state, int x, int y, int ts) {
+    public CustomerState(String id, CustomerStateType state, double x, double y, int ts) {
         this.id = id;
         this.state = state;
         this.x = x;
@@ -33,32 +37,53 @@ public class CustomerState {
         this.ts = ts;
         this.inStateSince = ts;
         this.inStateCnt = 1;
+        this.sequenceCnt = 1;
     }
 
-    public CustomerState(String id, CustomerStateType state, int x, int y, int ts, String lastSeenIn, int lastSeenAt, int inStateCnt, int inStateSince) {
+    public CustomerState(String id, CustomerStateType state, double x, double y, int ts, String lastSeenIn, int lastSeenAt, int inStateCnt, int inStateSince, int sequenceCnt) {
         this(id, state, x, y, ts);
         this.lastSeenIn = lastSeenIn;
         this.lastSeenAt = lastSeenAt;
         this.inStateCnt = inStateCnt;
         this.inStateSince = inStateSince;
+        this.sequenceCnt = sequenceCnt;
     }
 
-    public void update(CustomerMovement cm) {
-        System.out.println("Update customer location with " + cm);
+    public void incStateCnt() {
+        this.inStateCnt += 1;
+    }
+
+    public void resetStateCnt() {
+        this.inStateSince = ts;
+        this.inStateCnt = 0;
+    }
+
+    public int getInStateSince() {
+        return inStateSince;
+    }
+
+    public void setInStateSince(int inStateSince) {
+        this.inStateSince = inStateSince;
+    }
+
+    public int getSequenceCnt() {
+        return sequenceCnt;
+    }
+
+    public void setSequenceCnt(int sequenceCnt) {
+        this.sequenceCnt = sequenceCnt;
+    }
+
+    public void incSequenceCnt() {
+        this.sequenceCnt += 1;
+    }
+
+    public void updateLastLocation(CustomerMovement cm) {
         this.lastSeenIn = cm.getSeenIn();
         this.lastSeenAt = cm.getTs();
 
         this.x = cm.getX();
         this.y = cm.getY();
-
-    }
-
-    public void startBrowsingState(int ts) {
-        System.out.println("===========================> Customer starts browsing...");
-        this.state = CustomerStateType.BROWSING;
-        this.inStateSince = ts;
-        this.inStateCnt = 1;
-
     }
 
     @Override
@@ -73,6 +98,7 @@ public class CustomerState {
                 ", state=" + state +
                 ", inStateCnt=" + inStateCnt +
                 ", inStateSince=" + inStateSince +
+                ", sequenceCnt=" + sequenceCnt +
                 '}';
     }
 
@@ -84,19 +110,19 @@ public class CustomerState {
         this.id = id;
     }
 
-    public int getX() {
+    public double getX() {
         return x;
     }
 
-    public void setX(int x) {
+    public void setX(double x) {
         this.x = x;
     }
 
-    public int getY() {
+    public double getY() {
         return y;
     }
 
-    public void setY(int y) {
+    public void setY(double y) {
         this.y = y;
     }
 
@@ -104,16 +130,18 @@ public class CustomerState {
         return ts;
     }
 
-    public void setState(CustomerStateType state) {
-        this.state = state;
+    public void setTs(int ts) {
+        this.ts = ts;
     }
 
+    @Deprecated
     public CustomerStateType getState() {
         return state;
     }
 
-    public void setTs(int ts) {
-        this.ts = ts;
+    @Deprecated
+    public void setState(CustomerStateType state) {
+        this.state = state;
     }
 
     public String getLastSeenIn() {

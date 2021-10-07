@@ -1,7 +1,7 @@
 package org.demo.rsotf;
 
 import org.demo.rsotf.model.*;
-import org.demo.rsotf.services.StoreLocationService;
+import org.demo.rsotf.services.CustomerStateService;
 import org.kie.kogito.rules.DataSource;
 import org.kie.kogito.rules.DataStore;
 import org.kie.kogito.rules.RuleUnitData;
@@ -22,7 +22,7 @@ public class CustomerUnit implements RuleUnitData {
     private int requiredNumberOfSteps = 3;
 
     @Inject
-    private StoreLocationService storeLocationService;
+    private CustomerStateService customerStateService;
 
     public CustomerUnit() {
         this(DataSource.createSingleton(),
@@ -30,7 +30,6 @@ public class CustomerUnit implements RuleUnitData {
                 DataSource.createStore(),
                 DataSource.createStore(),
                 CustomerUnit.getDepartments(), DataSource.createSingleton());
-        System.out.println("Creating data sources");
     }
 
     public CustomerUnit(
@@ -49,16 +48,16 @@ public class CustomerUnit implements RuleUnitData {
             departmentDataStore.add(d);
         }
 
-        this.storeLocationService = new StoreLocationService();
+        this.customerStateService = new CustomerStateService();
     }
 
     private static List<Department> getDepartments() {
         List<Department> departments = new LinkedList<>();
-        departments.add(new Department("Women", new Area(444, 443,  666, 879), ""));
-        departments.add(new Department("Boys",  new Area(672, 443,  992, 658), ""));
-        departments.add(new Department("Girls", new Area(998, 443, 1317, 658), ""));
-        departments.add(new Department("Men",   new Area(672, 664, 1317, 879), ""));
-        departments.add(new Department("Sports",new Area(614, 984, 1186, 1292), ""));
+        departments.add(new Department("Boy's",   new Area(0.10, 0.20,  1.70, 8.00), ""));
+        departments.add(new Department("Girl's",  new Area(0.10, 8.10,  4.20, 13.05), ""));
+        departments.add(new Department("Women's", new Area(4.30, 8.10,  15.00, 13.05), ""));
+        departments.add(new Department("Men's",   new Area(4.30, 0.20,  13.70, 5.50), ""));
+        departments.add(new Department("Sport",  new Area(15.10, 8.10,  18.00, 13.05), ""));
         return departments;
     }
 
@@ -78,12 +77,12 @@ public class CustomerUnit implements RuleUnitData {
         this.customerMovements = customerMovements;
     }
 
-    public StoreLocationService getStoreLocationService() {
-        return storeLocationService;
+    public CustomerStateService getCustomerStateService() {
+        return customerStateService;
     }
 
-    public void setStoreLocationService(StoreLocationService storeLocationService) {
-        this.storeLocationService = storeLocationService;
+    public void setCustomerStateService(CustomerStateService customerStateService) {
+        this.customerStateService = customerStateService;
     }
 
     public DataStore<Department> getDepartmentDataStore() {

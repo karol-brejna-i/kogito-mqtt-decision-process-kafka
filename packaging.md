@@ -45,8 +45,23 @@ Or, if you don't have GraalVM installed, you can run the native executable build
 ./mvnw package -Pnative -Dquarkus.native.container-build=true
 ```
 
-You can then execute your native executable with: `./target/mqtt-decision-process-kafka-1.0-SNAPSHOT-runner`
+You can then execute your native binary with: `./target/mqtt-decision-process-kafka-1.0-SNAPSHOT-runner`
 
 If you want to learn more about building native executables, please consult https://quarkus.io/guides/maven-tooling.html
 .
 
+## Creating a Docker container
+For the user convenience, the project contains a dockerfile that makes
+building a container for the service easier (and cleaner).
+
+[src/main/docker/Dockerfile.multistage](src/main/docker/Dockerfile.multistage) eliminates the need for
+having Java, Maven nor Graal installed on the build machine. It also doesn't leave you with all the dependencies downloaded
+by Maven.
+
+```
+docker build -f src/main/docker/Dockerfile.multistage -t quarkus:v1 .
+```
+
+```
+buildah bud  --ulimit=nofile=2048:2048 -f src/main/docker/Dockerfile.multistage -t quarkus:v1 ./
+```

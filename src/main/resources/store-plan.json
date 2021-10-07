@@ -1,0 +1,174 @@
+{
+  "store": {
+    "width": 200,
+    "height": 100
+  },
+  "areas": [
+    {
+      "name": "Boy's",
+      "type": "department",
+      "color": "#E5E059",
+      "x1": 0.10,
+      "y1": 0.20,
+      "x2": 1.70,
+      "y2": 8.00
+    },
+    {
+      "name": "Girl's",
+      "type": "department",
+      "color": "#E5625E",
+      "x1": 0.10,
+      "y1": 8.10,
+      "x2": 4.20,
+      "y2": 13.05
+    },
+    {
+      "name": "Women's",
+      "type": "department",
+      "color": "#BDD358",
+      "x1": 4.30,
+      "y1": 8.10,
+      "x2": 15.00,
+      "y2": 13.05
+    },
+    {
+      "name": "Men's",
+      "type": "department",
+      "color": "#05668D",
+      "x1": 4.30,
+      "y1": 0.20,
+      "x2": 13.70,
+      "y2": 5.50
+    },
+    {
+      "name": "Sport",
+      "type": "department",
+      "color": "#FAA916",
+      "x1": 15.10,
+      "y1": 8.10,
+      "x2": 18.00,
+      "y2": 13.05
+    },
+    {
+      "name": "Customer\nService",
+      "type": "customer-service",
+      "color": "#999799",
+      "x1": 16.40,
+      "y1": 4.10,
+      "x2": 18.00,
+      "y2": 8.00
+    },
+    {
+      "name": "Checkout",
+      "type": "checkout",
+      "color": "#999799",
+      "x1": 16.40,
+      "y1": 0.30,
+      "x2": 18.00,
+      "y2": 4.00
+    },
+    {
+      "type": "door",
+      "x1": 3.00,
+      "y1": 0
+    },
+    {
+      "type": "door",
+      "x1": 15.00,
+      "y1": 0
+    }
+  ],
+  "furniture": [
+    {
+      "type": "hanger-1",
+      "x": 0.20,
+      "y": 0.60,
+      "repeat-y": 7
+    },
+    {
+      "type": "hanger-2",
+      "x": 4.50,
+      "y": 2.00,
+      "repeat-x": 5,
+      "spacing": 0.37
+    },
+    {
+      "type": "shelfs-1",
+      "x": 6.00,
+      "y": 0.30,
+      "repeat-x": 5
+    },
+    {
+      "type": "hanger-1",
+      "x": 4.50,
+      "y": 4.30,
+      "repeat-x": 8,
+      "spacing": 0.7
+    },
+    {
+      "type": "shelfs-1r",
+      "x": 0.20,
+      "y": 8.50,
+      "repeat-y": 3
+    },
+    {
+      "type": "shelfs-1",
+      "x": 0.80,
+      "y": 12.50,
+      "repeat-x": 11
+    },
+    {
+      "type": "hanger-2",
+      "x": 2.00,
+      "y": 8.20,
+      "repeat-y": 2,
+      "spacing": 0.37
+    },
+    {
+      "type": "hanger-2",
+      "x": 4.40,
+      "y": 10.00,
+      "repeat-x": 6,
+      "spacing": 0.30
+    },
+    {
+      "type": "hanger-1r",
+      "x": 4.70,
+      "y": 8.30,
+      "repeat-x": 3,
+      "spacing": 0.5
+    },
+    {
+      "type": "hanger-1r",
+      "x": 10.50,
+      "y": 8.30,
+      "repeat-x": 4
+    },
+    {
+      "type": "shelfs-1r",
+      "x": 17.40,
+      "y": 8.50,
+      "repeat-y": 3
+    },
+    {
+      "type": "hanger-1",
+      "x": 15.80,
+      "y": 8.60,
+      "repeat-y": 3
+    },
+    {
+      "type": "pouffe",
+      "x": 4.50,
+      "y": 6.50,
+      "repeat-x": 4,
+      "spacing": 0.20
+    },
+    {
+      "type": "pouffe",
+      "x": 9.30,
+      "y": 6.50,
+      "repeat-x": 5,
+      "spacing": 0.30
+    }
+  ]
+}

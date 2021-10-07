@@ -1,5 +1,6 @@
 package org.demo.rsotf.model;
 
+@Deprecated
 public enum CustomerStateType {
     UNKNOWN("UNKNOWN"),
     BROWSING("BROWSING"),
