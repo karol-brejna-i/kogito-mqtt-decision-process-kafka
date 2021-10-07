@@ -73,17 +73,17 @@ then
     // if customer is seen in the same location again
     if (c.getSeenIn() != null && c.getSeenIn() == s.getLastSeenIn()) {
         System.out.println("User moved around THE SAME DEPARTMENT");
-        s.incStateCnt();
+        s.incFocusCounter();
     } else {
         // customer in unknown location or changed department
         System.out.println("customer in unknown location or changed department");
-        s.resetStateCnt();
+        s.setFocusCounter(0);
     }
 
     // update last position
     s.updateLastLocation(c);
     // increment number of moves
-    s.incSequenceCnt();
+    s.incStepCounter();
     update(s);
 
     // and remember it
@@ -94,29 +94,32 @@ rule "Announce focused customer"
 activation-group "judging"
 salience 100
 when
- s: /customerState[inStateCnt >= requiredNumberOfSteps]
+ s: /customerState[focusCounter >= requiredNumberOfSteps]
 then
     System.out.println(String.format("---- rule %s; location = %s", drools.getRule().getName(), s.toString()));
 
-    CustomerFocus focus = new CustomerFocus(s.getTs(), s.getId(), s.getLastSeenIn());
+    CustomerFocus focus = new CustomerFocus(s.getId().toString(), s.getTs(), s.getLastSeenIn());
     customerFocus.add(focus);
     insert(focus);
 
-    // TODO reset sequenceCnt?
+    // reset state
+    s.setFocusCounter(0);
+    s.setStepCounter(0);
 end
 
 rule "Announce browsing customer"
 activation-group "judging"
 salience 90
 when
- s: /customerState[sequenceCnt > 6]
+ s: /customerState[stepCounter > requiredBrowsingNumberOfSteps]
 then
     System.out.println(String.format("---- rule %s; location = %s", drools.getRule().getName(), s.toString()));
 
     browsingCustomer.set(s);
     insert(s);
 
-    // TODO reset sequenceCnt?
+    // reset counter
+    s.setStepCounter(0);
 end
 
 //--

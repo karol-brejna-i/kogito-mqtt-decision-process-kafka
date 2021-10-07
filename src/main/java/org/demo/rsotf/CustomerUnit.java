@@ -19,24 +19,19 @@ public class CustomerUnit implements RuleUnitData {
     private SingletonStore<CustomerState> browsingCustomer;
 
     // Number of "steps" in the same department to treat a customer as focused
-    private int requiredNumberOfSteps = 3;
+    private int requiredNumberOfSteps = 4;
+    private int requiredBrowsingNumberOfSteps = 20;
 
     @Inject
     private CustomerStateService customerStateService;
 
     public CustomerUnit() {
-        this(DataSource.createSingleton(),
-                DataSource.createSingleton(),
-                DataSource.createStore(),
-                DataSource.createStore(),
-                CustomerUnit.getDepartments(), DataSource.createSingleton());
+        this(DataSource.createSingleton(), DataSource.createSingleton(), DataSource.createStore(),
+                DataSource.createStore(), CustomerUnit.getDepartments(), DataSource.createSingleton());
     }
 
-    public CustomerUnit(
-            SingletonStore<CustomerMovement> customerMovements,
-            SingletonStore<CustomerState> customerState,
-            DataStore<CustomerFocus> customerFocus,
-            DataStore<Department> departmentDataStore,
+    public CustomerUnit(SingletonStore<CustomerMovement> customerMovements, SingletonStore<CustomerState> customerState,
+            DataStore<CustomerFocus> customerFocus, DataStore<Department> departmentDataStore,
             List<Department> departments, SingletonStore<CustomerState> browsingCustomer) {
 
         this.customerMovements = customerMovements;
@@ -111,5 +106,13 @@ public class CustomerUnit implements RuleUnitData {
 
     public void setBrowsingCustomer(SingletonStore<CustomerState> browsingCustomer) {
         this.browsingCustomer = browsingCustomer;
+    }
+
+    public int getRequiredBrowsingNumberOfSteps() {
+        return requiredBrowsingNumberOfSteps;
+    }
+
+    public void setRequiredBrowsingNumberOfSteps(int requiredBrowsingNumberOfSteps) {
+        this.requiredBrowsingNumberOfSteps = requiredBrowsingNumberOfSteps;
     }
 }

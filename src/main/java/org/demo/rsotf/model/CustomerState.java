@@ -16,66 +16,30 @@ public class CustomerState {
     @Deprecated
     private CustomerStateType state = CustomerStateType.UNKNOWN;
 
-    // how many steps in given state
-    private int inStateCnt;
-
-    // when the state begun (timestamp)
-    private int inStateSince;
-
-    // number of moves in current sequence (regardless the state)
-    private int sequenceCnt;
+    private int focusCounter;
+    private int stepCounter;
 
     // Jackson likes this for deserialization
     public CustomerState() {
     }
 
-    public CustomerState(String id, CustomerStateType state, double x, double y, int ts) {
+    public CustomerState(String id, CustomerStateType state, double x, double y) {
         this.id = id;
         this.state = state;
         this.x = x;
         this.y = y;
         this.ts = ts;
-        this.inStateSince = ts;
-        this.inStateCnt = 1;
-        this.sequenceCnt = 1;
+        this.focusCounter = 0;
+        this.stepCounter = 0;
     }
 
-    public CustomerState(String id, CustomerStateType state, double x, double y, int ts, String lastSeenIn, int lastSeenAt, int inStateCnt, int inStateSince, int sequenceCnt) {
-        this(id, state, x, y, ts);
+    public CustomerState(String id, CustomerStateType state, double x, double y, int ts, String lastSeenIn,
+            int lastSeenAt) {
+        this(id, state, x, y);
         this.lastSeenIn = lastSeenIn;
         this.lastSeenAt = lastSeenAt;
-        this.inStateCnt = inStateCnt;
-        this.inStateSince = inStateSince;
-        this.sequenceCnt = sequenceCnt;
-    }
-
-    public void incStateCnt() {
-        this.inStateCnt += 1;
-    }
-
-    public void resetStateCnt() {
-        this.inStateSince = ts;
-        this.inStateCnt = 0;
-    }
-
-    public int getInStateSince() {
-        return inStateSince;
-    }
-
-    public void setInStateSince(int inStateSince) {
-        this.inStateSince = inStateSince;
-    }
-
-    public int getSequenceCnt() {
-        return sequenceCnt;
-    }
-
-    public void setSequenceCnt(int sequenceCnt) {
-        this.sequenceCnt = sequenceCnt;
-    }
-
-    public void incSequenceCnt() {
-        this.sequenceCnt += 1;
+        this.focusCounter = 0;
+        this.stepCounter = 0;
     }
 
     public void updateLastLocation(CustomerMovement cm) {
@@ -88,18 +52,9 @@ public class CustomerState {
 
     @Override
     public String toString() {
-        return "CustomerState{" +
-                "id='" + id + '\'' +
-                ", x=" + x +
-                ", y=" + y +
-                ", ts=" + ts +
-                ", lastSeenIn='" + lastSeenIn + '\'' +
-                ", lastSeenAt=" + lastSeenAt +
-                ", state=" + state +
-                ", inStateCnt=" + inStateCnt +
-                ", inStateSince=" + inStateSince +
-                ", sequenceCnt=" + sequenceCnt +
-                '}';
+        return "CustomerState{" + "id='" + id + '\'' + ", x=" + x + ", y=" + y + ", ts=" + ts + ", lastSeenIn='"
+                + lastSeenIn + '\'' + ", lastSeenAt=" + lastSeenAt + ", state=" + state + ", focusCounter="
+                + focusCounter + ", stepCounter=" + stepCounter + '}';
     }
 
     public String getId() {
@@ -160,11 +115,27 @@ public class CustomerState {
         this.lastSeenAt = lastSeenAt;
     }
 
-    public int getInStateCnt() {
-        return inStateCnt;
+    public int getFocusCounter() {
+        return focusCounter;
     }
 
-    public void setInStateCnt(int inStateCnt) {
-        this.inStateCnt = inStateCnt;
+    public void setFocusCounter(int focusCounter) {
+        this.focusCounter = focusCounter;
+    }
+
+    public void incFocusCounter() {
+        this.focusCounter++;
+    };
+
+    public int getStepCounter() {
+        return stepCounter;
+    }
+
+    public void setStepCounter(int stepCounter) {
+        this.stepCounter = stepCounter;
+    }
+
+    public void incStepCounter() {
+        this.stepCounter++;
     }
 }

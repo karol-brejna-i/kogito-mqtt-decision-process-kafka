@@ -128,7 +128,7 @@ docker exec mosquitto mosquitto_sub -h 127.0.0.1 -t "test"
 For this particular use case, the following command sends the "user movement" event:
 
 ```sh
-docker exec mosquitto mosquitto_pub -h 127.0.0.1 -t "customer/move" -m '{"id":"3","ts":0,"x":550,"y":550}}'
+docker exec mosquitto mosquitto_pub -h 127.0.0.1 -t "customer/move" -m '{"id":"3","ts":0,"x":1.0,"y":1.0}}'
 ```
 
 This command listens to focused customer events:
@@ -138,7 +138,7 @@ docker exec mosquitto mosquitto_sub -h 127.0.0.1 -t "customer/focus"
 
 For publishing the same message a few times you can use:
 ```sh
-docker exec mosquitto /bin/sh -c "for i in 1 2 3 4 5; do mosquitto_pub -i client_id -h 127.0.0.1 -t \"customer/move\" -m '{\"id\":\"3\",\"ts\":0,\"x\":550,\"y\":550}'; done"
+docker exec mosquitto /bin/sh -c "for i in 1 2 3 4 5; do mosquitto_pub -i client_id -h 127.0.0.1 -t \"customer/move\" -m '{\"id\":\"3\",\"ts\":0,\"x\":1.0,\"y\":1.0}'; done"
 ```
 
 docker exec mosquitto mosquitto_sub -h 127.0.0.1 -t ""

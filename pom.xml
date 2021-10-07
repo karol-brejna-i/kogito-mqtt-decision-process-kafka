@@ -13,10 +13,10 @@
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <quarkus-plugin.version>1.13.2.Final</quarkus-plugin.version>
+        <quarkus-plugin.version>2.2.2.Final</quarkus-plugin.version>
         <quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
-        <quarkus.platform.version>1.13.2.Final</quarkus.platform.version>
+        <quarkus.platform.version>2.2.2.Final</quarkus.platform.version>
         <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
     </properties>
     <dependencyManagement>
@@ -49,8 +49,9 @@
         </dependency>
         <dependency>
             <groupId>org.kie.kogito</groupId>
-            <artifactId>kogito-cloudevents-quarkus-addon</artifactId>
+            <artifactId>kogito-addons-quarkus-cloudevents</artifactId>
         </dependency>
+
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-smallrye-openapi</artifactId>
@@ -138,8 +139,7 @@
                                         <native.image.path>
                                             ${project.build.directory}/${project.build.finalName}-runner
                                         </native.image.path>
-                                        <java.util.logging.manager>org.jboss.logmanager.LogManager
-                                        </java.util.logging.manager>
+                                        <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                                         <maven.home>${maven.home}</maven.home>
                                     </systemPropertyVariables>
                                 </configuration>
